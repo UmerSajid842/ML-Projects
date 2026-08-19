@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 from src.exception import CustomException
 from src.logger import logging
 import pandas as pd
@@ -14,13 +15,14 @@ class DataIngestionConfig:
     raw_data_path: str=os.path.join('artifacts',"data.csv")
 
 class DataIngestion:
-    def __init__(self):
+    def __init__(self, data_path=None):
         self.ingestion_config=DataIngestionConfig()
+        self.data_path = Path(data_path) if data_path else Path(__file__).resolve().parents[2] / "Notebook" / "data" / "stud.csv"
 
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
         try:
-            df=pd.read_csv('E:/Projectss_datascience/MlProjects/Notebook/data/stud.csv')
+            df=pd.read_csv(self.data_path)
             logging.info('Read the dataset as dataframe')
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
